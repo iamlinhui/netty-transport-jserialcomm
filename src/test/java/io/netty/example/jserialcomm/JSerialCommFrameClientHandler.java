@@ -15,18 +15,27 @@
  */
 package io.netty.example.jserialcomm;
 
+import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
-public class JSerialCommClientHandler extends SimpleChannelInboundHandler<String> {
+import java.util.concurrent.TimeUnit;
+
+public class JSerialCommFrameClientHandler extends SimpleChannelInboundHandler<Frame> {
+
+    private final String cmd = "ea0c00013131";
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-
+        ctx.writeAndFlush(ByteUtils.parseHexStrToByte(cmd));
     }
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
-        System.out.println(msg);
+    public void channelRead0(ChannelHandlerContext ctx, Frame msg) throws Exception {
+        byte[] bytes = ByteBufUtil.getBytes(msg.getData());
+        String s = new String(bytes);
+        System.out.println(s);
+        TimeUnit.MILLISECONDS.sleep(66);
+        ctx.writeAndFlush(ByteUtils.parseHexStrToByte(cmd));
     }
 }

@@ -15,43 +15,25 @@
  */
 package io.netty.example.jserialcomm;
 
-import com.fazecast.jSerialComm.SerialPortTimeoutException;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
-//import io.netty.channel.jsc.DefaultJSerialCommChannelConfig;
-import io.netty.channel.jsc.JSerialCommChannelConfig;
-import io.netty.channel.jsc.JSerialCommDeviceAddress;
 import io.netty.channel.jsc.JSerialCommChannel;
-import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.jsc.JSerialCommDeviceAddress;
 import io.netty.channel.oio.OioEventLoopGroup;
-import io.netty.handler.codec.LineBasedFrameDecoder;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 
 /**
  * Sends one message to a serial device
  */
 public final class JSerialCommClient {
 
-    static final String PORT = System.getProperty("port", "COM3");
+    static final String PORT = System.getProperty("port", "COM23");
 
     public static void main(String[] args) throws Exception {
         EventLoopGroup group = new OioEventLoopGroup();
-        //EventLoopGroup group = new NioEventLoopGroup();
-        try {
-            Bootstrap b = new Bootstrap();
-            b.group(group);
-            b.channel(JSerialCommChannel.class);
-            b.handler(new JSerialCommChannelInitializer());
-
-            ChannelFuture f = b.connect(new JSerialCommDeviceAddress(PORT)).sync();
-
-            f.channel().closeFuture().sync();
-        }
-        finally {
-            group.shutdownGracefully();
-        }
+        Bootstrap b = new Bootstrap();
+        b.group(group);
+        b.channel(JSerialCommChannel.class);
+        b.handler(new JSerialCommChannelInitializer());
+        b.connect(new JSerialCommDeviceAddress(PORT)).sync();
     }
 }
