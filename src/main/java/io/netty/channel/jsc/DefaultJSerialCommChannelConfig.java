@@ -113,7 +113,7 @@ final class DefaultJSerialCommChannelConfig extends DefaultChannelConfig impleme
     @Override
     public JSerialCommChannelConfig setParitybit(final Paritybit paritybit) {
         this.paritybit = paritybit;
-        return  this;
+        return this;
     }
 
     @Override

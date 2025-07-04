@@ -25,7 +25,7 @@ import io.netty.channel.RecvByteBufAllocator;
  * A configuration class for JSerialComm device connections.
  *
  * <h3>Available options</h3>
- *
+ * <p>
  * In addition to the options provided by {@link ChannelConfig},
  * {@link DefaultJSerialCommChannelConfig} allows the following options in the option map:
  *
@@ -178,7 +178,7 @@ public interface JSerialCommChannelConfig extends ChannelConfig {
 
     /**
      * @return The number of milliseconds to wait between opening the serial port and
-     *     initialising.
+     * initialising.
      */
     int getWaitTimeMillis();
 
@@ -188,7 +188,7 @@ public interface JSerialCommChannelConfig extends ChannelConfig {
      * occur.
      *
      * @param waitTimeMillis The number of milliseconds to wait, defaulting to 0 (no
-     *     wait) if unset
+     *                       wait) if unset
      * @throws IllegalArgumentException if the supplied value is &lt; 0
      */
     JSerialCommChannelConfig setWaitTimeMillis(int waitTimeMillis);

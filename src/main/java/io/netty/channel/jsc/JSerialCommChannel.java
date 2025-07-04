@@ -33,6 +33,7 @@ import static io.netty.channel.jsc.JSerialCommChannelOption.*;
 /**
  * A channel to a serial device using the jSerialComm library.
  */
+@SuppressWarnings("deprecation")
 public class JSerialCommChannel extends OioByteStreamChannel {
 
     private static final JSerialCommDeviceAddress LOCAL_ADDRESS = new JSerialCommDeviceAddress("localhost");
@@ -71,6 +72,7 @@ public class JSerialCommChannel extends OioByteStreamChannel {
      * Netty的默认处理是关闭连接
      * 此处理不妥，很多时候串口不一定有心跳数据，很长时间也不一定有数据，但是也不能关闭连接
      * 此处自定义JSerialCommReadTimeoutException，将该异常抛出到串口应用程序，然后依据业务实际情况进行处理
+     *
      * @param buf
      * @return
      * @throws Exception
@@ -80,13 +82,11 @@ public class JSerialCommChannel extends OioByteStreamChannel {
         final RecvByteBufAllocator.Handle allocHandle = unsafe().recvBufAllocHandle();
         allocHandle.attemptedBytesRead(Math.max(1, Math.min(available(), buf.maxWritableBytes())));
 
-        is=serialPort.getInputStream();
-        int i=allocHandle.attemptedBytesRead();
+        is = serialPort.getInputStream();
+        int i = allocHandle.attemptedBytesRead();
         try {
             return buf.writeBytes(is, i);
-        }
-        catch (IOException io)
-        {
+        } catch (IOException io) {
             //串口在给定时间内没数据读取
             //抛出自定义串口读取超时异常处理异常JSerialCommReadTimeoutException
             throw new JSerialCommReadTimeoutException("The Serial read operation timed out before any data was returned");
@@ -110,10 +110,10 @@ public class JSerialCommChannel extends OioByteStreamChannel {
 
     protected void doInit() throws Exception {
         serialPort.setComPortParameters(
-            config().getOption(BAUD_RATE),
-            config().getOption(DATA_BITS),
-            config().getOption(STOP_BITS).value(),
-            config().getOption(PARITY_BIT).value()
+                config().getOption(BAUD_RATE),
+                config().getOption(DATA_BITS),
+                config().getOption(STOP_BITS).value(),
+                config().getOption(PARITY_BIT).value()
         );
 
         activate(serialPort.getInputStream(), serialPort.getOutputStream());
@@ -153,7 +153,7 @@ public class JSerialCommChannel extends OioByteStreamChannel {
     protected void doClose() throws Exception {
         open = false;
         try {
-           super.doClose();
+            super.doClose();
         } finally {
             if (serialPort != null) {
                 serialPort.closePort();
@@ -202,7 +202,7 @@ public class JSerialCommChannel extends OioByteStreamChannel {
                                 closeIfClosed();
                             }
                         }
-                   }, waitTime, TimeUnit.MILLISECONDS);
+                    }, waitTime, TimeUnit.MILLISECONDS);
                 } else {
                     doInit();
                     safeSetSuccess(promise);

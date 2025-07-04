@@ -31,7 +31,7 @@ public final class JSerialCommChannelOption<T> extends ChannelOption<T> {
     public static final ChannelOption<Integer> WAIT_TIME = valueOf("WAIT_TIME");
     public static final ChannelOption<Integer> READ_TIMEOUT = valueOf("READ_TIMEOUT");
 
-    @SuppressWarnings({ "unused", "deprecation" })
+    @SuppressWarnings({"unused", "deprecation"})
     private JSerialCommChannelOption() {
         super(null);
     }
